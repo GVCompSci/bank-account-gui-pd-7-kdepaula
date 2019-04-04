@@ -24,28 +24,28 @@ import javax.swing.JTextField;
  */
 public class Frame extends JFrame
 {
-	private static final double OVER_DRAFT_FEE = 15;
-	private static final double RATE = .0025;
-	private static final double TRANSACTION_FEE = 1.5;
-	private static final double MIN_BAL = 300;
-	private static final double MIN_BAL_FEE = 10;
-	private static final double FREE_TRANSACTIONS = 10;
 	
 	public Frame()
 	{
 		ArrayList <BankAccount> accList = new ArrayList<BankAccount>();
-		setTitle("Bank Account");
-		setBounds(500, 200, 400, 250);
+		setTitle("Katelyn's Bank");
+		setBounds(100, 100, 600, 600);
 		
 		CardLayout cl = new CardLayout();
 		JPanel overall = new JPanel();
+		add(overall);
 		overall.setLayout(cl);
 		
+		Home home = new Home();
+		overall.add(home, "Home");
+		cl.show(overall, "Home");
+		
+		//a bunch of menu bar stuff:
 		JMenuBar bar = new JMenuBar();
 		
 		JMenu menu1 = new JMenu("Account");
-		JMenuItem addAcc = new JMenuItem("Add Account");
-		menu1.add(addAcc);
+		JMenuItem option1 = new JMenuItem("Add Account");
+		menu1.add(option1);
 		JMenuItem option2 = new JMenuItem("Remove Account");
 		menu1.add(option2);
 		JMenuItem option3 = new JMenuItem("Find Account");
@@ -53,111 +53,43 @@ public class Frame extends JFrame
 		bar.add(menu1);
 		
 		JMenu menu2 = new JMenu("Transaction");
-		JMenuItem option4 = new JMenuItem("hmm");
+		JMenuItem option4 = new JMenuItem("Deposit or Withdraw");
 		menu2.add(option4);
-		JMenuItem option5 = new JMenuItem("this");
+		JMenuItem option5 = new JMenuItem("Transfer");
 		menu2.add(option5);
-		JMenuItem option6 = new JMenuItem("no");
+		JMenuItem option6 = new JMenuItem("Get Balance");
 		menu2.add(option6);
 		bar.add(menu2);
 		
-		JMenuItem menu3 = new JMenuItem("Home");
-		JMenu cluster = new JMenu("Many options");
-		menu3.add(cluster);
-		JMenuItem option7 = new JMenuItem("stuff");
-		cluster.add(option7);
-		JMenuItem option8 = new JMenuItem("?!!??!");
-		cluster.add(option8);
-		bar.add(menu3);
+		JMenuItem homeMenuItem = new JMenuItem("Home");
+		bar.add(homeMenuItem);
+		
+		CreateAccount createAcc = new CreateAccount(accList);
+		overall.add(createAcc, "Add Account");
 		
 		option1.addActionListener(new ActionListener ()
 		{
 			
 			public void actionPerformed(ActionEvent arg0) 
 			{
-				man.setVisible(false);
+				cl.show(overall, "Add Account");
 			}
 
 		});
 		
-		option8.addActionListener(new ActionListener ()
+		FindAccount findAcc = new FindAccount(accList);
+		overall.add(findAcc, "Find Account");
+		
+		option3.addActionListener(new ActionListener ()
 		{
 			
 			public void actionPerformed(ActionEvent arg0) 
 			{
-				man.setVisible(true);
+				cl.show(overall, "Find Account");
 			}
 
 		});
 	
-		
-		JLabel name = new JLabel("Name: ");
-		name.setBounds(30, 30, 80, 20);
-		add(name);
-		
-		JTextField nameTxt = new JTextField("");
-		nameTxt.setBounds(140, 30, 200, 20);
-		add(nameTxt);
-		
-		JLabel bal = new JLabel("Initial Balance: ");
-		bal.setBounds(30, 90, 100, 20);
-		add(bal);
-		
-		JTextField balTxt = new JTextField("");
-		balTxt.setBounds(140, 90, 200, 20);
-		add(balTxt);
-		
-		JLabel acc = new JLabel("Account Type: ");
-		acc.setBounds(30, 60, 100, 20);
-		add(acc);
-		
-		JComboBox type = new JComboBox(new String[] {"", "Checking", "Savings"});
-		type.setBounds(140, 60, 200, 20);
-		add(type);
-		
-		JButton displayAcc = new JButton("Display All Accounts");
-		displayAcc.setBounds(200, 120, 150, 30);
-		add(displayAcc);
-		displayAcc.addActionListener(new ActionListener() 
-		{
-			public void actionPerformed(ActionEvent e) 
-			{
-					for(BankAccount a : accList)
-					{
-						System.out.print(a.toString());
-						System.out.println();
-					}
-			}
-		});
-		
-		JButton createAcc = new JButton("Create Account");
-		createAcc.setSize(new Dimension(140, 30));
-		createAcc.setLocation(new Point(30, 120));
-		add(createAcc);
-		createAcc.addActionListener(new ActionListener() 
-		{
-			public void actionPerformed(ActionEvent e) 
-			{
-				if(!isNumeric(balTxt.getText()) || type.getSelectedItem().equals("") || nameTxt.getText().equals(""))
-				{
-					
-				}
-				else if(type.getSelectedItem().equals("Checking"))
-				{
-					accList.add(new CheckingAccount(nameTxt.getText(), Double.parseDouble(balTxt.getText()), OVER_DRAFT_FEE, TRANSACTION_FEE, FREE_TRANSACTIONS));
-					nameTxt.setText("");
-					balTxt.setText("");
-					type.setSelectedItem("");
-				}
-				else if(type.getSelectedItem().equals("Savings"))
-				{
-					accList.add(new SavingsAccount(nameTxt.getText(), Double.parseDouble(balTxt.getText()), RATE, MIN_BAL, MIN_BAL_FEE));
-					nameTxt.setText("");
-					balTxt.setText("");
-					type.setSelectedItem("");
-				}
-			}
-		});
 		
 		this.setJMenuBar(bar);
 		this.setVisible(true);
